@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../js/jquery.countdownx.js"></script>
+</head>
+<body>
+<br />------------默认参数--------------<br />
+<div class="countdown 1" data-endtimestamp="1452268612991"></div>
+<div class="countdown 2" data-endtimestamp="1454268612991"></div>
+<div class="countdown 3" data-endtimestamp="1451270458740"></div>
+
+<br />-----------自定义显示格式---------------<br />
+<div class="countdownx1 1x" data-endtimestamp="1452268612991"></div>
+<div class="countdownx1 2x" data-endtimestamp="1454268612991"></div>
+
+<br />------------使用回调--------------<br />
+<div class="countdownx2 1x" data-endtimestamp="1451270458740"></div>
+<div class="countdownx2 2x" data-endtimestamp="1451270458740"></div>
+
+<br />-----------倒计时---------------<br />
+<div class="countdownx3 1x" data-endtimestamp="">发送</div>
+<div class="countdownx3 2x" data-endtimestamp="">发送</div>
+
+<br />-----------所有的倒计时共用一个---------------<br />
+<div class="itemclock clock1" data-endtimestamp="1454268612991"></div>
+<div class="itemclock clock2" data-endtimestamp="1454248525991"></div>
+<div class="itemclock clock3" data-endtimestamp=""></div>
+<script type="text/javascript">
+	//默认参数
+	$('.countdown').countDownMul();
+	
+	//自定义显示格式
+	$('.countdownx1').countDownMul({
+		'clockText':'{hh}时{mm}分{ss}秒',
+	});
+	
+	//使用回调
+	$('.countdownx2').countDownMul({
+		'endcallFunc':function(currObj,countDownx){
+			$(countDownx.options['showCtxSelecter']).attr('data-disable',true);
+			console.log(countDownx.options['showCtxSelecter']);
+			console.log('活动结束');
+		}
+	});
+	
+	//倒计时 - 渲染界面的时候会有问题 - 使用的是setInterval
+	$(".countdownx3").click(function(){
+		var endTimestarmp = new Date().getTime() + 10*1000;
+		$(this).attr('data-endtimestamp',endTimestarmp);
+		$(this).attr('data-disable',true);
+		$(this).countDownMulx({
+			'clockText':'{ss}秒',
+			'endcallFunc':function(currObj,countDownx){
+				console.log(countDownx);
+				$(currObj).attr('data-disable',false);
+				$(currObj).html('发送');
+				console.log('倒计时结束');
+			}
+		});
+	});
+	
+	//使用单一定时器
+	$('.clock3').attr("data-endtimestamp",new Date().getTime()+10*1000);
+	$.countDownSingleTimer({
+		'showCtxSelecter':'.itemclock',
+		'endText':'活动结束',
+		'clockText':'{dd}天{hh}时{mm}分{ss}秒',
+		'endcallFunc':function(currObj,countDownx){
+			console.log(currObj);
+			console.log('倒计时结束');
+		}
+	});
+</script>
+</body>
+</html>
